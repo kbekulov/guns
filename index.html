@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Handgun Purchase Planner</title>
+    <title>Handgun Plans</title>
     <meta
       name="description"
-      content="A personal planning canvas for ranking and tracking future handgun purchases."
+      content="A simple gallery-style view of planned handgun purchases with drag-and-drop priorities."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,134 +22,95 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="site-shell">
-      <header class="hero-section">
-        <div class="container py-5">
-          <div class="row g-4 align-items-end">
-            <div class="col-lg-7">
-              <span class="eyebrow">Personal Purchase Canvas</span>
-              <h1 class="display-4 mt-3">Handgun Wishlist Ladder</h1>
-              <p class="hero-copy mt-3 mb-4">
-                A focused board for ranking your next handgun purchases, comparing options,
-                and keeping the shortlist moving as your priorities change.
-              </p>
-              <div class="d-flex flex-wrap gap-3">
-                <button class="btn btn-warning btn-lg px-4" id="add-handgun-button" type="button">
-                  Add Handgun
-                </button>
-                <button class="btn btn-outline-light btn-lg px-4" id="reset-board-button" type="button">
-                  Reset Starter List
-                </button>
-              </div>
-            </div>
-            <div class="col-lg-5">
-              <div class="hero-panel">
-                <p class="panel-label mb-3">Board Snapshot</p>
-                <div class="row g-3" id="summary-cards">
-                  <div class="col-6">
-                    <div class="stat-card">
-                      <span class="stat-label">Tracked</span>
-                      <strong class="stat-value" id="total-count">0</strong>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="stat-card">
-                      <span class="stat-label">Top Priority</span>
-                      <strong class="stat-value stat-value-sm" id="top-choice">None yet</strong>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="stat-card">
-                      <span class="stat-label">Priced</span>
-                      <strong class="stat-value" id="priced-count">0</strong>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="stat-card">
-                      <span class="stat-label">With Photos</span>
-                      <strong class="stat-value" id="photo-count">0</strong>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <main class="page-shell">
+      <div class="container py-4 py-lg-5">
+        <header class="page-header mb-4 mb-lg-5">
+          <div class="header-copy">
+            <span class="eyebrow">Gun Plan</span>
+            <h1 class="display-5 mb-3">My next handgun shortlist</h1>
+            <p class="lead-copy mb-0">
+              A simple gallery of what I’m considering next, sorted by how close each one is to
+              making the cut.
+            </p>
           </div>
-        </div>
-      </header>
-
-      <main class="container pb-5">
-        <section class="row g-4 mb-4">
-          <div class="col-xl-8">
-            <div class="section-card board-card">
-              <div class="section-heading d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-                <div>
-                  <span class="eyebrow text-dark">Priority Ladder</span>
-                  <h2 class="h3 mb-0">Drag cards up or down the buying stack</h2>
-                </div>
-                <p class="helper-copy mb-0">Move cards between columns and reorder within each lane.</p>
-              </div>
-              <div class="row g-3" id="priority-board">
-                <div class="col-md-6 col-xl-3">
-                  <section class="priority-lane" data-priority="immediate">
-                    <div class="lane-header">
-                      <span class="lane-kicker">01</span>
-                      <h3>Immediate Focus</h3>
-                      <p>Closest to purchase.</p>
-                    </div>
-                    <div class="lane-body" id="lane-immediate"></div>
-                  </section>
-                </div>
-                <div class="col-md-6 col-xl-3">
-                  <section class="priority-lane" data-priority="shortlist">
-                    <div class="lane-header">
-                      <span class="lane-kicker">02</span>
-                      <h3>Shortlist</h3>
-                      <p>Strong contenders.</p>
-                    </div>
-                    <div class="lane-body" id="lane-shortlist"></div>
-                  </section>
-                </div>
-                <div class="col-md-6 col-xl-3">
-                  <section class="priority-lane" data-priority="research">
-                    <div class="lane-header">
-                      <span class="lane-kicker">03</span>
-                      <h3>Researching</h3>
-                      <p>Need more clarity.</p>
-                    </div>
-                    <div class="lane-body" id="lane-research"></div>
-                  </section>
-                </div>
-                <div class="col-md-6 col-xl-3">
-                  <section class="priority-lane" data-priority="backburner">
-                    <div class="lane-header">
-                      <span class="lane-kicker">04</span>
-                      <h3>Back Burner</h3>
-                      <p>Interesting, not urgent.</p>
-                    </div>
-                    <div class="lane-body" id="lane-backburner"></div>
-                  </section>
-                </div>
-              </div>
-            </div>
+          <div class="header-actions">
+            <button class="btn btn-dark" id="add-handgun-button" type="button">Add handgun</button>
+            <button class="btn btn-outline-dark" id="reset-board-button" type="button">Reset list</button>
           </div>
+        </header>
 
-          <div class="col-xl-4">
-            <div class="section-card detail-card">
-              <div class="section-heading mb-4">
-                <span class="eyebrow text-dark">Selection Detail</span>
-                <h2 class="h3 mb-0">Purchase notes</h2>
-              </div>
-              <div id="detail-panel" class="detail-panel">
-                <div class="detail-empty">
-                  <h3>Select a card</h3>
-                  <p class="mb-0">Click any handgun card to inspect notes, pricing, and image links.</p>
-                </div>
-              </div>
-            </div>
+        <section class="spotlight-card mb-4 mb-lg-5" id="spotlight-panel">
+          <div class="spotlight-empty">
+            <p class="mb-0">No handguns in the board yet.</p>
           </div>
         </section>
-      </main>
-    </div>
+
+        <section class="summary-row mb-4 mb-lg-5" id="summary-cards">
+          <div class="summary-pill">
+            <span class="summary-label">Tracked</span>
+            <strong class="summary-value" id="total-count">0</strong>
+          </div>
+          <div class="summary-pill">
+            <span class="summary-label">Top pick</span>
+            <strong class="summary-value summary-value-wide" id="top-choice">None yet</strong>
+          </div>
+          <div class="summary-pill">
+            <span class="summary-label">Priced</span>
+            <strong class="summary-value" id="priced-count">0</strong>
+          </div>
+          <div class="summary-pill">
+            <span class="summary-label">Photos</span>
+            <strong class="summary-value" id="photo-count">0</strong>
+          </div>
+        </section>
+
+        <section class="lane-stack" id="priority-board">
+          <article class="gallery-lane" data-priority="immediate">
+            <div class="lane-heading">
+              <div>
+                <span class="lane-label">Priority 1</span>
+                <h2>Immediate Focus</h2>
+              </div>
+              <p>Closest to becoming the next buy.</p>
+            </div>
+            <div class="lane-body" id="lane-immediate"></div>
+          </article>
+
+          <article class="gallery-lane" data-priority="shortlist">
+            <div class="lane-heading">
+              <div>
+                <span class="lane-label">Priority 2</span>
+                <h2>Shortlist</h2>
+              </div>
+              <p>Strong contenders still in the running.</p>
+            </div>
+            <div class="lane-body" id="lane-shortlist"></div>
+          </article>
+
+          <article class="gallery-lane" data-priority="research">
+            <div class="lane-heading">
+              <div>
+                <span class="lane-label">Priority 3</span>
+                <h2>Researching</h2>
+              </div>
+              <p>Interesting, but I still need more clarity.</p>
+            </div>
+            <div class="lane-body" id="lane-research"></div>
+          </article>
+
+          <article class="gallery-lane" data-priority="backburner">
+            <div class="lane-heading">
+              <div>
+                <span class="lane-label">Priority 4</span>
+                <h2>Back Burner</h2>
+              </div>
+              <p>Worth keeping in view, just not urgent.</p>
+            </div>
+            <div class="lane-body" id="lane-backburner"></div>
+          </article>
+        </section>
+      </div>
+    </main>
 
     <div class="modal fade" id="handgunModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -191,7 +152,7 @@
               </div>
               <div class="col-12">
                 <label class="form-label" for="imageUrl">Image URL</label>
-                <input class="form-control" id="imageUrl" name="imageUrl" placeholder="https://..." />
+                <input class="form-control" id="imageUrl" name="imageUrl" placeholder="https://... or img/file.jpg" />
               </div>
               <div class="col-12">
                 <label class="form-label" for="notes">Notes</label>
@@ -200,7 +161,7 @@
                   id="notes"
                   name="notes"
                   rows="4"
-                  placeholder="Why it made the list, what you still need to compare, ideal use case..."
+                  placeholder="Why it is on the list, what still needs comparing, ideal role..."
                 ></textarea>
               </div>
             </div>
@@ -209,7 +170,7 @@
             <button type="button" class="btn btn-outline-danger" id="delete-button">Delete</button>
             <div class="d-flex gap-2">
               <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-warning">Save Item</button>
+              <button type="submit" class="btn btn-dark">Save item</button>
             </div>
           </div>
         </form>

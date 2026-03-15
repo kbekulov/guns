@@ -58,7 +58,7 @@ const laneElements = Object.fromEntries(
   priorityOrder.map((priority) => [priority, document.getElementById(`lane-${priority}`)])
 );
 
-const detailPanel = document.getElementById("detail-panel");
+const spotlightPanel = document.getElementById("spotlight-panel");
 const form = document.getElementById("handgun-form");
 const modalElement = document.getElementById("handgunModal");
 const modal = new bootstrap.Modal(modalElement);
@@ -130,49 +130,60 @@ function render() {
     laneItems.forEach((item) => lane.appendChild(createCard(item)));
   });
 
-  renderDetail();
+  renderSpotlight();
   renderSummary();
 }
 
 function createCard(item) {
   const card = document.createElement("article");
-  card.className = "priority-card";
+  card.className = "gallery-card";
   card.dataset.id = item.id;
 
   if (item.id === selectedItemId) {
     card.classList.add("is-active");
   }
 
-  const variantMarkup = item.variant
-    ? `<p class="mb-3">${escapeHtml(item.variant)}</p>`
-    : '<p class="mb-3 text-muted">Variant details still open.</p>';
+  const imageMarkup = item.imageUrl
+    ? `<img class="gallery-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
+    : '<div class="image-placeholder">Image coming later</div>';
 
-  const priceMarkup = item.price
-    ? `<span class="planner-badge price">${escapeHtml(item.price)}</span>`
-    : '<span class="planner-badge">Price TBD</span>';
+  const variantMarkup = escapeHtml(item.variant || "Variant still open");
+  const noteSnippet = escapeHtml(item.notes || "No notes yet.");
+  const priceMarkup = `<span class="planner-badge price">${escapeHtml(item.price || "Price TBD")}</span>`;
 
   card.innerHTML = `
-    <div class="card-topline">
-      <div>
-        <span class="card-maker"><span class="maker-dot"></span>${escapeHtml(item.maker)}</span>
-        <h3 class="mt-2">${escapeHtml(item.model)}</h3>
+    ${imageMarkup}
+    <div class="gallery-card-body">
+      <div class="gallery-meta">
+        <span class="maker-label"><span class="maker-dot"></span>${escapeHtml(item.maker)}</span>
+        <span class="planner-badge">${priorityLabels[item.priority]}</span>
       </div>
-      <button class="btn btn-sm btn-outline-dark" type="button" data-action="edit">Edit</button>
-    </div>
-    ${variantMarkup}
-    <div class="card-actions">
-      <div class="card-tags">
+      <h3>${escapeHtml(item.model)}</h3>
+      <p class="gallery-variant mb-3">${variantMarkup}</p>
+      <div class="gallery-tags">
         ${priceMarkup}
       </div>
-      <span class="text-muted small">Open notes</span>
+      <p class="gallery-notes">${noteSnippet}</p>
+      <div class="gallery-actions">
+        <button class="btn btn-sm btn-outline-dark" type="button" data-action="select">Show</button>
+        <button class="btn btn-sm btn-dark" type="button" data-action="edit">Edit</button>
+      </div>
     </div>
   `;
 
   card.addEventListener("click", (event) => {
-    if (event.target instanceof HTMLElement && event.target.dataset.action === "edit") {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+
+    if (event.target.dataset.action === "edit") {
       event.stopPropagation();
       openForm(item.id);
       return;
+    }
+
+    if (event.target.dataset.action === "select") {
+      event.stopPropagation();
     }
 
     selectedItemId = item.id;
@@ -194,45 +205,50 @@ function renderSummary() {
   document.getElementById("top-choice").textContent = topItem ? topItem.model : "None yet";
 }
 
-function renderDetail() {
+function renderSpotlight() {
   const item = items.find((entry) => entry.id === selectedItemId);
 
   if (!item) {
-    detailPanel.innerHTML = `
-      <div class="detail-empty">
-        <h3>Select a card</h3>
-        <p class="mb-0">Click any handgun card to inspect notes, pricing, and image links.</p>
+    spotlightPanel.innerHTML = `
+      <div class="spotlight-empty">
+        <p class="mb-0">No handguns in the board yet.</p>
       </div>
     `;
     return;
   }
 
   const imageMarkup = item.imageUrl
-    ? `<img class="detail-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
-    : '<div class="detail-image d-flex align-items-center justify-content-center"><span class="text-muted">Image slot ready</span></div>';
+    ? `<img class="spotlight-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
+    : '<div class="image-placeholder spotlight-placeholder">Image coming later</div>';
 
   const notes = item.notes
     ? escapeHtml(item.notes).replace(/\n/g, "<br />")
     : "Add notes about fit, use case, optics plans, pricing windows, or range impressions.";
 
-  detailPanel.innerHTML = `
-    <div class="detail-body">
+  spotlightPanel.innerHTML = `
+    <div>
       ${imageMarkup}
-      <span class="card-maker mb-2"><span class="maker-dot"></span>${escapeHtml(item.maker)}</span>
-      <h3 class="mb-2">${escapeHtml(item.model)}</h3>
-      <p class="detail-meta mb-3">${escapeHtml(item.variant || "Variant still undecided")}</p>
-      <div class="detail-tags mb-3">
+    </div>
+    <div class="spotlight-copy">
+      <div class="spotlight-meta">
+        <span class="maker-label"><span class="maker-dot"></span>${escapeHtml(item.maker)}</span>
         <span class="planner-badge">${priorityLabels[item.priority]}</span>
         <span class="planner-badge price">${escapeHtml(item.price || "Price TBD")}</span>
       </div>
-      <p class="mb-0">${notes}</p>
-      <div class="detail-actions">
-        <button class="btn btn-warning" type="button" id="detail-edit-button">Edit Item</button>
+      <h2 class="spotlight-model">${escapeHtml(item.model)}</h2>
+      <p class="spotlight-variant mb-0">${escapeHtml(item.variant || "Variant still undecided")}</p>
+      <div class="spotlight-tags">
+        <span class="planner-badge">${item.imageUrl ? "Photo ready" : "Photo pending"}</span>
+        <span class="planner-badge">${item.notes ? "Notes added" : "Notes pending"}</span>
+      </div>
+      <p class="spotlight-notes mb-0">${notes}</p>
+      <div class="spotlight-actions">
+        <button class="btn btn-dark" type="button" id="spotlight-edit-button">Edit item</button>
       </div>
     </div>
   `;
 
-  document.getElementById("detail-edit-button").addEventListener("click", () => openForm(item.id));
+  document.getElementById("spotlight-edit-button").addEventListener("click", () => openForm(item.id));
 }
 
 function openForm(itemId = null) {
