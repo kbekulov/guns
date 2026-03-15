@@ -15,7 +15,7 @@ const starterItems = [
     model: "G48 Gen5 MOS",
     variant: "Slimline optic-ready carry setup",
     price: "",
-    imageUrl: "",
+    imageUrl: "img/g48-mos.webp",
     priority: "immediate",
     notes: "Strong all-around practical choice. Likely easiest to justify as a next buy.",
   },
@@ -94,7 +94,24 @@ function loadItems() {
 
   try {
     const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) && parsed.length ? parsed : structuredClone(starterItems);
+    if (!Array.isArray(parsed) || !parsed.length) {
+      return structuredClone(starterItems);
+    }
+
+    return parsed.map((item) => {
+      const starterMatch = starterItems.find(
+        (starterItem) => starterItem.maker === item.maker && starterItem.model === item.model
+      );
+
+      if (!starterMatch) {
+        return item;
+      }
+
+      return {
+        ...item,
+        imageUrl: item.imageUrl || starterMatch.imageUrl,
+      };
+    });
   } catch {
     return structuredClone(starterItems);
   }
