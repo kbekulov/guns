@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Handgun Plans</title>
+    <title>Handgun Tier List</title>
     <meta
       name="description"
-      content="A simple gallery-style view of planned handgun purchases with drag-and-drop priorities."
+      content="A simple tier list for handgun plans with pictures, names, prices, and drag-and-drop status lanes."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -24,13 +24,13 @@
   <body>
     <main class="page-shell">
       <div class="container py-4 py-lg-5">
-        <header class="page-header mb-4 mb-lg-5">
-          <div class="header-copy">
-            <span class="eyebrow">Gun Plan</span>
-            <h1 class="display-5 mb-3">My next handgun shortlist</h1>
+        <header class="page-header mb-4">
+          <div>
+            <span class="eyebrow">Tier List</span>
+            <h1 class="display-5 mb-2">My handgun plans</h1>
             <p class="lead-copy mb-0">
-              A simple gallery of what I’m considering next, sorted by how close each one is to
-              making the cut.
+              Drag cards between tiers to show what I want most, what I am still considering,
+              and what I already own.
             </p>
           </div>
           <div class="header-actions">
@@ -39,74 +39,57 @@
           </div>
         </header>
 
-        <section class="spotlight-card mb-4 mb-lg-5" id="spotlight-panel">
-          <div class="spotlight-empty">
-            <p class="mb-0">No handguns in the board yet.</p>
-          </div>
-        </section>
-
-        <section class="summary-row mb-4 mb-lg-5" id="summary-cards">
+        <section class="summary-row mb-4" id="summary-cards">
           <div class="summary-pill">
-            <span class="summary-label">Tracked</span>
+            <span class="summary-label">Total</span>
             <strong class="summary-value" id="total-count">0</strong>
           </div>
           <div class="summary-pill">
-            <span class="summary-label">Top pick</span>
+            <span class="summary-label">Top priority</span>
             <strong class="summary-value summary-value-wide" id="top-choice">None yet</strong>
           </div>
           <div class="summary-pill">
-            <span class="summary-label">Priced</span>
+            <span class="summary-label">With prices</span>
             <strong class="summary-value" id="priced-count">0</strong>
           </div>
           <div class="summary-pill">
-            <span class="summary-label">Photos</span>
-            <strong class="summary-value" id="photo-count">0</strong>
+            <span class="summary-label">Purchased</span>
+            <strong class="summary-value" id="purchased-count">0</strong>
           </div>
         </section>
 
-        <section class="lane-stack" id="priority-board">
-          <article class="gallery-lane" data-priority="immediate">
-            <div class="lane-heading">
+        <section class="tier-list" id="priority-board">
+          <article class="tier-row" data-priority="top">
+            <div class="tier-label tier-label-top">
+              <span class="tier-kicker">A</span>
               <div>
-                <span class="lane-label">Priority 1</span>
-                <h2>Immediate Focus</h2>
+                <h2>Top Priority</h2>
+                <p>Closest to the next buy.</p>
               </div>
-              <p>Closest to becoming the next buy.</p>
             </div>
-            <div class="lane-body" id="lane-immediate"></div>
+            <div class="tier-cards lane-body" id="lane-top"></div>
           </article>
 
-          <article class="gallery-lane" data-priority="shortlist">
-            <div class="lane-heading">
+          <article class="tier-row" data-priority="considering">
+            <div class="tier-label tier-label-considering">
+              <span class="tier-kicker">B</span>
               <div>
-                <span class="lane-label">Priority 2</span>
-                <h2>Shortlist</h2>
+                <h2>Considering</h2>
+                <p>Still comparing and narrowing down.</p>
               </div>
-              <p>Strong contenders still in the running.</p>
             </div>
-            <div class="lane-body" id="lane-shortlist"></div>
+            <div class="tier-cards lane-body" id="lane-considering"></div>
           </article>
 
-          <article class="gallery-lane" data-priority="research">
-            <div class="lane-heading">
+          <article class="tier-row" data-priority="purchased">
+            <div class="tier-label tier-label-purchased">
+              <span class="tier-kicker">C</span>
               <div>
-                <span class="lane-label">Priority 3</span>
-                <h2>Researching</h2>
+                <h2>Already Purchased</h2>
+                <p>Picked up and off the wishlist.</p>
               </div>
-              <p>Interesting, but I still need more clarity.</p>
             </div>
-            <div class="lane-body" id="lane-research"></div>
-          </article>
-
-          <article class="gallery-lane" data-priority="backburner">
-            <div class="lane-heading">
-              <div>
-                <span class="lane-label">Priority 4</span>
-                <h2>Back Burner</h2>
-              </div>
-              <p>Worth keeping in view, just not urgent.</p>
-            </div>
-            <div class="lane-body" id="lane-backburner"></div>
+            <div class="tier-cards lane-body" id="lane-purchased"></div>
           </article>
         </section>
       </div>
@@ -117,7 +100,7 @@
         <form class="modal-content" id="handgun-form">
           <div class="modal-header">
             <div>
-              <p class="modal-eyebrow mb-1">Wishlist Item</p>
+              <p class="modal-eyebrow mb-1">Tier List Item</p>
               <h2 class="modal-title fs-4 mb-0">Edit Handgun</h2>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -133,22 +116,21 @@
                 <label class="form-label" for="maker">Maker</label>
                 <input class="form-control" id="maker" name="maker" required />
               </div>
-              <div class="col-12">
-                <label class="form-label" for="variant">Variant / Configuration</label>
-                <input class="form-control" id="variant" name="variant" placeholder='Example: 4" Compact, MOS, full-size' />
-              </div>
               <div class="col-md-6">
-                <label class="form-label" for="price">Target Price</label>
+                <label class="form-label" for="price">Price</label>
                 <input class="form-control" id="price" name="price" placeholder="$899" />
               </div>
               <div class="col-md-6">
-                <label class="form-label" for="priority">Priority Lane</label>
+                <label class="form-label" for="priority">Tier</label>
                 <select class="form-select" id="priority" name="priority">
-                  <option value="immediate">Immediate Focus</option>
-                  <option value="shortlist">Shortlist</option>
-                  <option value="research">Researching</option>
-                  <option value="backburner">Back Burner</option>
+                  <option value="top">Top Priority</option>
+                  <option value="considering">Considering</option>
+                  <option value="purchased">Already Purchased</option>
                 </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="variant">Variant / Configuration</label>
+                <input class="form-control" id="variant" name="variant" placeholder='Example: MOS, 4" compact' />
               </div>
               <div class="col-12">
                 <label class="form-label" for="imageUrl">Image URL</label>
@@ -161,7 +143,7 @@
                   id="notes"
                   name="notes"
                   rows="4"
-                  placeholder="Why it is on the list, what still needs comparing, ideal role..."
+                  placeholder="Quick reason why it is here..."
                 ></textarea>
               </div>
             </div>

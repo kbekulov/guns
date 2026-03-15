@@ -1,11 +1,10 @@
 const STORAGE_KEY = "handgun-planner-items-v1";
 
-const priorityOrder = ["immediate", "shortlist", "research", "backburner"];
+const priorityOrder = ["top", "considering", "purchased"];
 const priorityLabels = {
-  immediate: "Immediate Focus",
-  shortlist: "Shortlist",
-  research: "Researching",
-  backburner: "Back Burner",
+  top: "Top Priority",
+  considering: "Considering",
+  purchased: "Already Purchased",
 };
 
 const starterItems = [
@@ -16,7 +15,7 @@ const starterItems = [
     variant: "Slimline optic-ready carry setup",
     price: "",
     imageUrl: "img/g48-mos.webp",
-    priority: "immediate",
+    priority: "top",
     notes: "Strong all-around practical choice. Likely easiest to justify as a next buy.",
   },
   {
@@ -26,7 +25,7 @@ const starterItems = [
     variant: "High-interest premium pick",
     price: "",
     imageUrl: "img/p211-gt4.jpg",
-    priority: "shortlist",
+    priority: "considering",
     notes: "Aspirational option. Worth comparing once real-world pricing and availability settle.",
   },
   {
@@ -36,7 +35,7 @@ const starterItems = [
     variant: "Exact version still undecided",
     price: "",
     imageUrl: "",
-    priority: "research",
+    priority: "considering",
     notes: "Needs configuration narrowing before moving higher on the ladder.",
   },
   {
@@ -46,19 +45,15 @@ const starterItems = [
     variant: "4-inch configuration",
     price: "",
     imageUrl: "",
-    priority: "shortlist",
+    priority: "considering",
     notes: "High-interest alternative with a clearer compact-use angle.",
   },
 ];
 
 let items = loadItems();
-let selectedItemId = items[0]?.id ?? null;
-
 const laneElements = Object.fromEntries(
   priorityOrder.map((priority) => [priority, document.getElementById(`lane-${priority}`)])
 );
-
-const spotlightPanel = document.getElementById("spotlight-panel");
 const form = document.getElementById("handgun-form");
 const modalElement = document.getElementById("handgunModal");
 const modal = new bootstrap.Modal(modalElement);
@@ -110,6 +105,7 @@ function loadItems() {
       return {
         ...item,
         imageUrl: item.imageUrl || starterMatch.imageUrl,
+        priority: normalizePriority(item.priority),
       };
     });
   } catch {
@@ -130,43 +126,33 @@ function render() {
     laneItems.forEach((item) => lane.appendChild(createCard(item)));
   });
 
-  renderSpotlight();
   renderSummary();
 }
 
 function createCard(item) {
   const card = document.createElement("article");
-  card.className = "gallery-card";
+  card.className = "gun-card";
   card.dataset.id = item.id;
 
-  if (item.id === selectedItemId) {
-    card.classList.add("is-active");
-  }
-
   const imageMarkup = item.imageUrl
-    ? `<img class="gallery-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
+    ? `<img class="gun-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
     : '<div class="image-placeholder">Image coming later</div>';
 
   const variantMarkup = escapeHtml(item.variant || "Variant still open");
   const noteSnippet = escapeHtml(item.notes || "No notes yet.");
-  const priceMarkup = `<span class="planner-badge price">${escapeHtml(item.price || "Price TBD")}</span>`;
+  const priceMarkup = `<span class="gun-price">${escapeHtml(item.price || "Price TBD")}</span>`;
 
   card.innerHTML = `
     ${imageMarkup}
-    <div class="gallery-card-body">
-      <div class="gallery-meta">
-        <span class="maker-label"><span class="maker-dot"></span>${escapeHtml(item.maker)}</span>
-        <span class="planner-badge">${priorityLabels[item.priority]}</span>
-      </div>
+    <div class="gun-card-body">
+      <span class="maker-label">${escapeHtml(item.maker)}</span>
       <h3>${escapeHtml(item.model)}</h3>
-      <p class="gallery-variant mb-3">${variantMarkup}</p>
-      <div class="gallery-tags">
-        ${priceMarkup}
-      </div>
-      <p class="gallery-notes">${noteSnippet}</p>
-      <div class="gallery-actions">
-        <button class="btn btn-sm btn-outline-dark" type="button" data-action="select">Show</button>
+      <p class="gun-variant mb-0">${variantMarkup}</p>
+      ${priceMarkup}
+      <p class="gun-notes mb-0">${noteSnippet}</p>
+      <div class="gun-actions">
         <button class="btn btn-sm btn-dark" type="button" data-action="edit">Edit</button>
+        <span class="small text-muted">${priorityLabels[item.priority]}</span>
       </div>
     </div>
   `;
@@ -181,13 +167,6 @@ function createCard(item) {
       openForm(item.id);
       return;
     }
-
-    if (event.target.dataset.action === "select") {
-      event.stopPropagation();
-    }
-
-    selectedItemId = item.id;
-    render();
   });
 
   return card;
@@ -196,59 +175,15 @@ function createCard(item) {
 function renderSummary() {
   document.getElementById("total-count").textContent = String(items.length);
   document.getElementById("priced-count").textContent = String(items.filter((item) => item.price).length);
-  document.getElementById("photo-count").textContent = String(items.filter((item) => item.imageUrl).length);
+  document.getElementById("purchased-count").textContent = String(
+    items.filter((item) => item.priority === "purchased").length
+  );
 
   const topItem = priorityOrder
     .flatMap((priority) => items.filter((item) => item.priority === priority))
     .at(0);
 
   document.getElementById("top-choice").textContent = topItem ? topItem.model : "None yet";
-}
-
-function renderSpotlight() {
-  const item = items.find((entry) => entry.id === selectedItemId);
-
-  if (!item) {
-    spotlightPanel.innerHTML = `
-      <div class="spotlight-empty">
-        <p class="mb-0">No handguns in the board yet.</p>
-      </div>
-    `;
-    return;
-  }
-
-  const imageMarkup = item.imageUrl
-    ? `<img class="spotlight-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
-    : '<div class="image-placeholder spotlight-placeholder">Image coming later</div>';
-
-  const notes = item.notes
-    ? escapeHtml(item.notes).replace(/\n/g, "<br />")
-    : "Add notes about fit, use case, optics plans, pricing windows, or range impressions.";
-
-  spotlightPanel.innerHTML = `
-    <div>
-      ${imageMarkup}
-    </div>
-    <div class="spotlight-copy">
-      <div class="spotlight-meta">
-        <span class="maker-label"><span class="maker-dot"></span>${escapeHtml(item.maker)}</span>
-        <span class="planner-badge">${priorityLabels[item.priority]}</span>
-        <span class="planner-badge price">${escapeHtml(item.price || "Price TBD")}</span>
-      </div>
-      <h2 class="spotlight-model">${escapeHtml(item.model)}</h2>
-      <p class="spotlight-variant mb-0">${escapeHtml(item.variant || "Variant still undecided")}</p>
-      <div class="spotlight-tags">
-        <span class="planner-badge">${item.imageUrl ? "Photo ready" : "Photo pending"}</span>
-        <span class="planner-badge">${item.notes ? "Notes added" : "Notes pending"}</span>
-      </div>
-      <p class="spotlight-notes mb-0">${notes}</p>
-      <div class="spotlight-actions">
-        <button class="btn btn-dark" type="button" id="spotlight-edit-button">Edit item</button>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("spotlight-edit-button").addEventListener("click", () => openForm(item.id));
 }
 
 function openForm(itemId = null) {
@@ -262,7 +197,7 @@ function openForm(itemId = null) {
   document.getElementById("maker").value = item?.maker ?? "";
   document.getElementById("variant").value = item?.variant ?? "";
   document.getElementById("price").value = item?.price ?? "";
-  document.getElementById("priority").value = item?.priority ?? "research";
+  document.getElementById("priority").value = normalizePriority(item?.priority ?? "considering");
   document.getElementById("imageUrl").value = item?.imageUrl ?? "";
   document.getElementById("notes").value = item?.notes ?? "";
   deleteButton.hidden = !item;
@@ -281,7 +216,7 @@ function handleSubmit(event) {
     maker: String(formData.get("maker")).trim(),
     variant: String(formData.get("variant")).trim(),
     price: String(formData.get("price")).trim(),
-    priority: String(formData.get("priority")).trim(),
+    priority: normalizePriority(String(formData.get("priority")).trim()),
     imageUrl: String(formData.get("imageUrl")).trim(),
     notes: String(formData.get("notes")).trim(),
   };
@@ -293,7 +228,6 @@ function handleSubmit(event) {
     items.push(nextItem);
   }
 
-  selectedItemId = id;
   saveItems();
   render();
   modal.hide();
@@ -306,7 +240,6 @@ function deleteCurrentItem() {
   }
 
   items = items.filter((item) => item.id !== id);
-  selectedItemId = items[0]?.id ?? null;
   saveItems();
   render();
   modal.hide();
@@ -314,7 +247,6 @@ function deleteCurrentItem() {
 
 function resetBoard() {
   items = structuredClone(starterItems);
-  selectedItemId = items[0]?.id ?? null;
   saveItems();
   render();
 }
@@ -342,9 +274,19 @@ function handleDragEnd(event) {
   });
 
   items = nextItems;
-  selectedItemId = movedId;
   saveItems();
   render();
+}
+
+function normalizePriority(priority) {
+  const mappedPriority = {
+    immediate: "top",
+    shortlist: "considering",
+    research: "considering",
+    backburner: "considering",
+  };
+
+  return mappedPriority[priority] || priority || "considering";
 }
 
 function escapeHtml(value) {
