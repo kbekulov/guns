@@ -25,7 +25,7 @@ const starterItems = [
     model: "P211 GT4",
     variant: "High-interest premium pick",
     price: "",
-    imageUrl: "",
+    imageUrl: "img/p211-gt4.jpg",
     priority: "shortlist",
     notes: "Aspirational option. Worth comparing once real-world pricing and availability settle.",
   },
