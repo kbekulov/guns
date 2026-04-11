@@ -4,7 +4,6 @@
   --ink: #101213;
   --muted: #697176;
   --line: #e1e5e8;
-  --accent: #1c6b4f;
 }
 
 * {
@@ -92,47 +91,22 @@ main {
   margin: 0 auto;
 }
 
-.intro-section {
-  max-width: 650px;
-  padding: 5rem 0 2rem;
-}
-
-.eyebrow {
-  margin: 0 0 0.6rem;
-  color: var(--accent);
-  font-size: 0.78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-h1,
 h2,
 p {
   overflow-wrap: anywhere;
 }
 
-h1,
 h2 {
   margin: 0;
   line-height: 1.08;
   letter-spacing: 0;
 }
 
-h1 {
-  font-size: 3.25rem;
-}
-
-.intro-section p:last-child {
-  margin: 1rem 0 0;
-  color: var(--muted);
-  font-size: 1.05rem;
-}
-
 .collection-section {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
-  padding: 1rem 0 4rem;
+  padding: 2rem 0 4rem;
 }
 
 .gun-card {
@@ -176,6 +150,7 @@ h1 {
 
 .card-meta {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   margin: 0;
@@ -183,6 +158,31 @@ h1 {
   font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
+}
+
+.card-meta span:first-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  padding: 0.22rem 0.5rem;
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+.gun-card[data-status="owned"] .card-meta span:first-child {
+  background: #1c6b4f;
+}
+
+.gun-card[data-status="maybe"] .card-meta span:first-child {
+  background: #3569a8;
+}
+
+.gun-card[data-status="planned"] .card-meta span:first-child {
+  background: #b54848;
+}
+
+.gun-card[data-status="complete"] .card-meta span:first-child {
+  background: #2f3437;
 }
 
 .card-meta span:last-child {
@@ -201,14 +201,7 @@ h1 {
 @media (max-width: 920px) {
   .collection-section {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .intro-section {
-    padding-top: 3.5rem;
-  }
-
-  h1 {
-    font-size: 2.7rem;
+    padding-top: 1.5rem;
   }
 }
 
@@ -230,16 +223,9 @@ h1 {
     width: min(100% - 1rem, 1120px);
   }
 
-  .intro-section {
-    padding: 2.5rem 0 1.25rem;
-  }
-
-  h1 {
-    font-size: 2.25rem;
-  }
-
   .collection-section {
     grid-template-columns: 1fr;
+    padding-top: 1rem;
     padding-bottom: 2.5rem;
   }
 
