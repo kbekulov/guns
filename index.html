@@ -6,16 +6,13 @@
     <title>Gun Collection Roadmap</title>
     <meta
       name="description"
-      content="A personal handgun collection roadmap for owned, maybe, planned, and collection-completing picks."
+      content="A personal handgun collection roadmap for owned, maybe, planned, and final-slot picks."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#collection" aria-label="Gun collection roadmap">
-        <span class="brand-mark">GC</span>
-        <span>Collection Roadmap</span>
-      </a>
+      <a class="brand" href="#collection" aria-label="Gun collection roadmap">Guns</a>
       <nav class="status-nav" aria-label="Collection filters">
         <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">
           All
@@ -30,203 +27,128 @@
           Planned
         </button>
         <button class="filter-button" type="button" data-filter="complete" aria-pressed="false">
-          Complete
+          Final
         </button>
       </nav>
     </header>
 
     <main id="collection">
       <section class="intro-section" aria-labelledby="page-title">
-        <div class="intro-copy">
-          <p class="eyebrow">Personal buy list</p>
-          <h1 id="page-title">Keep the collection focused.</h1>
-          <p>
-            One owned carry pistol, two maybe picks, two planned buys, and one final slot for a
-            modern 1911 or 2011.
-          </p>
-        </div>
-
-        <div class="quick-stats" aria-label="Collection summary">
-          <div>
-            <span class="stat-value">1</span>
-            <span class="stat-label">owned</span>
-          </div>
-          <div>
-            <span class="stat-value">2</span>
-            <span class="stat-label">maybe</span>
-          </div>
-          <div>
-            <span class="stat-value">2</span>
-            <span class="stat-label">planned</span>
-          </div>
-          <div>
-            <span class="stat-value">1</span>
-            <span class="stat-label">final slot</span>
-          </div>
-        </div>
+        <p class="eyebrow">Collection</p>
+        <h1 id="page-title">Handgun roadmap.</h1>
+        <p>
+          What is already mine, what is still a maybe, what comes next, and the final piece.
+        </p>
       </section>
 
       <section class="collection-section" aria-label="Handgun cards">
-        <article class="gun-card featured-card" data-status="owned">
-          <div class="gun-image-wrap">
+        <article class="gun-card" data-status="owned">
+          <figure class="gun-media">
             <img
               src="https://www.sigsauer.com/media/catalog/product/cache/2f7933e2ff16f0ec074a16ab6b6195f2/p/3/p365-spectre-comp-web-3.jpg"
               alt="SIG Sauer P365 Spectre Comp"
               fetchpriority="high"
             />
-          </div>
+          </figure>
           <div class="gun-card-body">
-            <div class="card-heading">
-              <span class="status-pill owned">Owned</span>
-              <span class="maker">SIG Sauer</span>
-            </div>
-            <h2>P365 Spectre Comp</h2>
-            <p>
-              The anchor piece: compact, compensated, already in the collection.
+            <p class="card-meta">
+              <span>Owned</span>
+              <span>SIG Sauer</span>
             </p>
-            <ul class="spec-list" aria-label="SIG Sauer P365 Spectre Comp notes">
-              <li>Micro-compact feel</li>
-              <li>Optics-ready Spectre setup</li>
-              <li>Keep as the carry baseline</li>
-            </ul>
+            <h2>P365 Spectre Comp</h2>
+            <p>Compact, compensated, and already the baseline.</p>
           </div>
         </article>
 
         <article class="gun-card" data-status="maybe">
-          <div class="gun-image-wrap">
+          <figure class="gun-media">
             <img
               src="https://www.sigsauer.com/media/wysiwyg/P365-ausa-2022.jpg"
               alt="SIG Sauer P365"
               loading="lazy"
               decoding="async"
             />
-          </div>
+          </figure>
           <div class="gun-card-body">
-            <div class="card-heading">
-              <span class="status-pill maybe">Maybe</span>
-              <span class="maker">SIG Sauer</span>
-            </div>
-            <h2>P365</h2>
-            <p>
-              The familiar choice if staying inside the P365 ecosystem matters most.
+            <p class="card-meta">
+              <span>Maybe</span>
+              <span>SIG Sauer</span>
             </p>
-            <ul class="spec-list" aria-label="SIG Sauer P365 notes">
-              <li>Small everyday option</li>
-              <li>Parts and feel stay familiar</li>
-              <li>Compare against the Glock G43</li>
-            </ul>
+            <h2>P365</h2>
+            <p>Familiar, tiny, and still inside the P365 ecosystem.</p>
           </div>
         </article>
 
         <article class="gun-card" data-status="maybe">
-          <div class="gun-image-wrap">
+          <figure class="gun-media">
             <img
               src="https://eu-images.contentstack.com/v3/assets/bltf7171cc1cfc1a31f/blt53b4c4a40a715c0c/690a203713307b262b9889d5/G43-XS.jpg"
               alt="Glock G43"
               loading="lazy"
               decoding="async"
             />
-          </div>
+          </figure>
           <div class="gun-card-body">
-            <div class="card-heading">
-              <span class="status-pill maybe">Maybe</span>
-              <span class="maker">Glock</span>
-            </div>
+            <p class="card-meta">
+              <span>Maybe</span>
+              <span>Glock</span>
+            </p>
             <h2>G43</h2>
-            <p>
-              The simple, slim alternate path for the smallest Glock slot.
-            </p>
-            <ul class="spec-list" aria-label="Glock G43 notes">
-              <li>Single-stack 9mm</li>
-              <li>Shortest Glock candidate</li>
-              <li>Worth handling before deciding</li>
-            </ul>
+            <p>The simple, slim alternate path for the smallest Glock slot.</p>
           </div>
         </article>
 
         <article class="gun-card" data-status="planned">
-          <div class="gun-image-wrap">
+          <figure class="gun-media">
             <img src="img/g48-mos.webp" alt="Glock G48 MOS" loading="lazy" decoding="async" />
-          </div>
+          </figure>
           <div class="gun-card-body">
-            <div class="card-heading">
-              <span class="status-pill planned">Planned</span>
-              <span class="maker">Glock</span>
-            </div>
-            <h2>G48</h2>
-            <p>
-              The planned slimline Glock with the longer sight radius and calmer footprint.
+            <p class="card-meta">
+              <span>Planned</span>
+              <span>Glock</span>
             </p>
-            <ul class="spec-list" aria-label="Glock G48 notes">
-              <li>Slimline frame</li>
-              <li>Comfortable carry size</li>
-              <li>Next-list priority</li>
-            </ul>
+            <h2>G48</h2>
+            <p>Slimline frame, longer grip, calmer carry footprint.</p>
           </div>
         </article>
 
         <article class="gun-card" data-status="planned">
-          <div class="gun-image-wrap">
+          <figure class="gun-media">
             <img
               src="https://springfieldarmory.b-cdn.net/wp-content/uploads/EC9409B-U-1024x770.png"
               alt="Springfield Armory Echelon 4.0C"
               loading="lazy"
               decoding="async"
             />
-          </div>
+          </figure>
           <div class="gun-card-body">
-            <div class="card-heading">
-              <span class="status-pill planned">Planned</span>
-              <span class="maker">Springfield Armory</span>
-            </div>
-            <h2>Echelon C</h2>
-            <p>
-              The compact Echelon slot: modern striker-fired ergonomics, optic mounting, and modularity.
+            <p class="card-meta">
+              <span>Planned</span>
+              <span>Springfield Armory</span>
             </p>
-            <ul class="spec-list" aria-label="Springfield Echelon C notes">
-              <li>4-inch compact profile</li>
-              <li>Optics-ready slide</li>
-              <li>Compare standard vs comp</li>
-            </ul>
+            <h2>Echelon C</h2>
+            <p>Compact Echelon slot with modern optics-ready modularity.</p>
           </div>
         </article>
 
         <article class="gun-card" data-status="complete">
-          <div class="gun-image-wrap">
+          <figure class="gun-media">
             <img
               src="https://images.contentstack.io/v3/assets/blted16ad9939ec9fa0/blt164a8b793ac3fbb8/65d528b9f4171c34b8d392a2/C2_Base_Image_2024.png"
               alt="Staccato C2 as a modern 2011 reference"
               loading="lazy"
               decoding="async"
             />
-          </div>
+          </figure>
           <div class="gun-card-body">
-            <div class="card-heading">
-              <span class="status-pill complete">Complete</span>
-              <span class="maker">Modern 1911 / 2011</span>
-            </div>
-            <h2>Final collection slot</h2>
-            <p>
-              A refined hammer-fired piece to round out the collection once the practical picks are done.
+            <p class="card-meta">
+              <span>Final</span>
+              <span>1911 / 2011</span>
             </p>
-            <ul class="spec-list" aria-label="Modern 1911 or 2011 notes">
-              <li>Pick exact model later</li>
-              <li>1911 heritage or 2011 capacity</li>
-              <li>Keep this as the grail slot</li>
-            </ul>
+            <h2>Modern 1911 or 2011</h2>
+            <p>The refined hammer-fired piece to complete the collection.</p>
           </div>
         </article>
-      </section>
-
-      <section class="decision-section" aria-labelledby="decision-title">
-        <div>
-          <p class="eyebrow">Next decision</p>
-          <h2 id="decision-title">P365 or G43 first, then move to the planned pair.</h2>
-        </div>
-        <p>
-          The current shape is clean: keep the Spectre Comp as the reference point, choose one small
-          maybe pistol, then chase the Glock G48 and Echelon C before the final 1911 or 2011.
-        </p>
       </section>
     </main>
 
