@@ -140,6 +140,10 @@ h2 {
   padding: 1.25rem;
 }
 
+.gun-media img.is-mirrored {
+  transform: scaleX(-1);
+}
+
 .gun-card-body {
   display: flex;
   flex: 1;
