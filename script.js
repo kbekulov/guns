@@ -1,303 +1,47 @@
-const STORAGE_KEY = "handgun-planner-items-v1";
+const filterButtons = Array.from(document.querySelectorAll(".filter-button"));
+const gunCards = Array.from(document.querySelectorAll(".gun-card"));
+const FILTER_STORAGE_KEY = "collection-roadmap-filter";
 
-const priorityOrder = ["top", "considering", "purchased"];
-const priorityLabels = {
-  top: "Top Priority",
-  considering: "Considering",
-  purchased: "Already Purchased",
-};
+const savedFilter = getSavedFilter();
+const initialFilter = filterButtons.some((button) => button.dataset.filter === savedFilter)
+  ? savedFilter
+  : "all";
 
-const starterItems = [
-  {
-    id: crypto.randomUUID(),
-    maker: "Glock",
-    model: "G48 Gen5 MOS",
-    variant: "Slimline optic-ready carry setup",
-    price: "",
-    imageUrl: "img/g48-mos.webp",
-    priority: "top",
-    notes: "Strong all-around practical choice. Likely easiest to justify as a next buy.",
-  },
-  {
-    id: crypto.randomUUID(),
-    maker: "SIG Sauer",
-    model: "P211 GT4",
-    variant: "High-interest premium pick",
-    price: "",
-    imageUrl: "img/p211-gt4.jpg",
-    priority: "considering",
-    notes: "Aspirational option. Worth comparing once real-world pricing and availability settle.",
-  },
-  {
-    id: crypto.randomUUID(),
-    maker: "Walther",
-    model: "PDP Pro",
-    variant: "Exact version still undecided",
-    price: "",
-    imageUrl: "",
-    priority: "considering",
-    notes: "Needs configuration narrowing before moving higher on the ladder.",
-  },
-  {
-    id: crypto.randomUUID(),
-    maker: "Walther",
-    model: 'PDP F Series 4"',
-    variant: "4-inch configuration",
-    price: "",
-    imageUrl: "",
-    priority: "considering",
-    notes: "High-interest alternative with a clearer compact-use angle.",
-  },
-];
+applyFilter(initialFilter);
 
-let items = loadItems();
-const laneElements = Object.fromEntries(
-  priorityOrder.map((priority) => [priority, document.getElementById(`lane-${priority}`)])
-);
-const form = document.getElementById("handgun-form");
-const modalElement = document.getElementById("handgunModal");
-const modal = new bootstrap.Modal(modalElement);
-const deleteButton = document.getElementById("delete-button");
-const addButton = document.getElementById("add-handgun-button");
-const resetButton = document.getElementById("reset-board-button");
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const nextFilter = button.dataset.filter || "all";
+    saveFilter(nextFilter);
+    applyFilter(nextFilter);
+  });
+});
 
-initializeBoard();
-render();
+function applyFilter(activeFilter) {
+  filterButtons.forEach((button) => {
+    const isActive = button.dataset.filter === activeFilter;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
 
-addButton.addEventListener("click", () => openForm());
-resetButton.addEventListener("click", resetBoard);
-form.addEventListener("submit", handleSubmit);
-deleteButton.addEventListener("click", deleteCurrentItem);
-
-function initializeBoard() {
-  priorityOrder.forEach((priority) => {
-    new Sortable(laneElements[priority], {
-      group: "handgun-priorities",
-      animation: 180,
-      ghostClass: "ghost-card",
-      onEnd: handleDragEnd,
-    });
+  gunCards.forEach((card) => {
+    const shouldShow = activeFilter === "all" || card.dataset.status === activeFilter;
+    card.classList.toggle("is-hidden", !shouldShow);
   });
 }
 
-function loadItems() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-
-  if (!stored) {
-    return structuredClone(starterItems);
-  }
-
+function getSavedFilter() {
   try {
-    const parsed = JSON.parse(stored);
-    if (!Array.isArray(parsed) || !parsed.length) {
-      return structuredClone(starterItems);
-    }
-
-    return parsed.map((item) => {
-      const starterMatch = starterItems.find(
-        (starterItem) => starterItem.maker === item.maker && starterItem.model === item.model
-      );
-
-      if (!starterMatch) {
-        return item;
-      }
-
-      return {
-        ...item,
-        imageUrl: item.imageUrl || starterMatch.imageUrl,
-        priority: normalizePriority(item.priority),
-      };
-    });
+    return localStorage.getItem(FILTER_STORAGE_KEY);
   } catch {
-    return structuredClone(starterItems);
+    return null;
   }
 }
 
-function saveItems() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-}
-
-function render() {
-  priorityOrder.forEach((priority) => {
-    const lane = laneElements[priority];
-    lane.innerHTML = "";
-
-    const laneItems = items.filter((item) => item.priority === priority);
-    laneItems.forEach((item) => lane.appendChild(createCard(item)));
-  });
-
-  renderSummary();
-}
-
-function createCard(item) {
-  const card = document.createElement("article");
-  card.className = "gun-card";
-  card.dataset.id = item.id;
-
-  const imageMarkup = item.imageUrl
-    ? `<img class="gun-image" src="${escapeAttribute(item.imageUrl)}" alt="${escapeAttribute(`${item.maker} ${item.model}`)}" />`
-    : '<div class="image-placeholder">Image coming later</div>';
-
-  const variantMarkup = escapeHtml(item.variant || "Variant still open");
-  const noteSnippet = escapeHtml(item.notes || "No notes yet.");
-  const priceMarkup = `<span class="gun-price">${escapeHtml(item.price || "Price TBD")}</span>`;
-
-  card.innerHTML = `
-    ${imageMarkup}
-    <div class="gun-card-body">
-      <span class="maker-label">${escapeHtml(item.maker)}</span>
-      <h3>${escapeHtml(item.model)}</h3>
-      <p class="gun-variant mb-0">${variantMarkup}</p>
-      ${priceMarkup}
-      <p class="gun-notes mb-0">${noteSnippet}</p>
-      <div class="gun-actions">
-        <button class="btn btn-sm btn-dark" type="button" data-action="edit">Edit</button>
-        <span class="small text-muted">${priorityLabels[item.priority]}</span>
-      </div>
-    </div>
-  `;
-
-  card.addEventListener("click", (event) => {
-    if (!(event.target instanceof HTMLElement)) {
-      return;
-    }
-
-    if (event.target.dataset.action === "edit") {
-      event.stopPropagation();
-      openForm(item.id);
-      return;
-    }
-  });
-
-  return card;
-}
-
-function renderSummary() {
-  document.getElementById("total-count").textContent = String(items.length);
-  document.getElementById("priced-count").textContent = String(items.filter((item) => item.price).length);
-  document.getElementById("purchased-count").textContent = String(
-    items.filter((item) => item.priority === "purchased").length
-  );
-
-  const topItem = priorityOrder
-    .flatMap((priority) => items.filter((item) => item.priority === priority))
-    .at(0);
-
-  document.getElementById("top-choice").textContent = topItem ? topItem.model : "None yet";
-}
-
-function openForm(itemId = null) {
-  const item = items.find((entry) => entry.id === itemId);
-
-  form.reset();
-  document.getElementById("handgun-id").value = item?.id ?? "";
-  document.querySelector(".modal-title").textContent = item ? "Edit Handgun" : "Add Handgun";
-
-  document.getElementById("model").value = item?.model ?? "";
-  document.getElementById("maker").value = item?.maker ?? "";
-  document.getElementById("variant").value = item?.variant ?? "";
-  document.getElementById("price").value = item?.price ?? "";
-  document.getElementById("priority").value = normalizePriority(item?.priority ?? "considering");
-  document.getElementById("imageUrl").value = item?.imageUrl ?? "";
-  document.getElementById("notes").value = item?.notes ?? "";
-  deleteButton.hidden = !item;
-
-  modal.show();
-}
-
-function handleSubmit(event) {
-  event.preventDefault();
-
-  const formData = new FormData(form);
-  const id = document.getElementById("handgun-id").value || crypto.randomUUID();
-  const nextItem = {
-    id,
-    model: String(formData.get("model")).trim(),
-    maker: String(formData.get("maker")).trim(),
-    variant: String(formData.get("variant")).trim(),
-    price: String(formData.get("price")).trim(),
-    priority: normalizePriority(String(formData.get("priority")).trim()),
-    imageUrl: String(formData.get("imageUrl")).trim(),
-    notes: String(formData.get("notes")).trim(),
-  };
-
-  const existingIndex = items.findIndex((item) => item.id === id);
-  if (existingIndex >= 0) {
-    items.splice(existingIndex, 1, nextItem);
-  } else {
-    items.push(nextItem);
-  }
-
-  saveItems();
-  render();
-  modal.hide();
-}
-
-function deleteCurrentItem() {
-  const id = document.getElementById("handgun-id").value;
-  if (!id) {
+function saveFilter(nextFilter) {
+  try {
+    localStorage.setItem(FILTER_STORAGE_KEY, nextFilter);
+  } catch {
     return;
   }
-
-  items = items.filter((item) => item.id !== id);
-  saveItems();
-  render();
-  modal.hide();
-}
-
-function resetBoard() {
-  items = structuredClone(starterItems);
-  saveItems();
-  render();
-}
-
-function handleDragEnd(event) {
-  const movedId = event.item.dataset.id;
-  const nextPriority = event.to.id.replace("lane-", "");
-
-  const movedItem = items.find((item) => item.id === movedId);
-  if (!movedItem) {
-    return;
-  }
-
-  movedItem.priority = nextPriority;
-
-  const nextItems = [];
-  priorityOrder.forEach((priority) => {
-    const cardIds = [...laneElements[priority].children].map((child) => child.dataset.id);
-    cardIds.forEach((id) => {
-      const match = items.find((item) => item.id === id);
-      if (match) {
-        nextItems.push(match);
-      }
-    });
-  });
-
-  items = nextItems;
-  saveItems();
-  render();
-}
-
-function normalizePriority(priority) {
-  const mappedPriority = {
-    immediate: "top",
-    shortlist: "considering",
-    research: "considering",
-    backburner: "considering",
-  };
-
-  return mappedPriority[priority] || priority || "considering";
-}
-
-function escapeHtml(value) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-function escapeAttribute(value) {
-  return escapeHtml(value);
 }

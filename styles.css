@@ -1,293 +1,455 @@
 :root {
-  --bg: #f7f3eb;
-  --panel: #fffdfa;
-  --line: rgba(24, 21, 17, 0.1);
-  --text: #171411;
-  --muted: #6f665d;
-  --top: #f0d58b;
-  --considering: #d8e2cf;
-  --purchased: #d5d3dc;
-  --shadow: 0 18px 45px rgba(40, 31, 22, 0.08);
+  --page: #f4f7f3;
+  --surface: #ffffff;
+  --ink: #111513;
+  --muted: #637067;
+  --line: #d9e1db;
+  --line-strong: #aab8af;
+  --green: #1f7a55;
+  --teal: #087b83;
+  --red: #c83f4a;
+  --gold: #e0b52f;
+  --coal: #22201f;
+  --shadow: 0 14px 34px rgba(20, 30, 24, 0.12);
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
-  min-height: 100vh;
-  color: var(--text);
+  min-width: 320px;
+  color: var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(240, 213, 139, 0.18), transparent 24%),
-    linear-gradient(180deg, #fcfaf5 0%, var(--bg) 100%);
-  font-family: "IBM Plex Sans", sans-serif;
+    linear-gradient(90deg, rgba(8, 123, 131, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, #f8faf7 0%, var(--page) 100%);
+  background-size: 52px 52px, auto;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
 }
 
-.page-header,
-.summary-pill,
-.tier-row {
-  background: rgba(255, 253, 250, 0.94);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
+img {
+  display: block;
+  max-width: 100%;
 }
 
-.page-header {
+button {
+  font: inherit;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: end;
   gap: 1rem;
-  padding: 1.4rem;
-  border-radius: 28px;
+  padding: 0.8rem max(1rem, calc((100vw - 1180px) / 2));
+  background: rgba(244, 247, 243, 0.94);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(16px);
 }
 
-.eyebrow,
-.modal-eyebrow {
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--muted);
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: max-content;
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: none;
 }
 
-.page-header h1,
-.tier-label h2,
-.gun-card h3,
-.summary-value {
-  font-family: "Space Grotesk", sans-serif;
-  letter-spacing: -0.04em;
-}
-
-.lead-copy {
-  max-width: 38rem;
-  color: var(--muted);
-}
-
-.header-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.btn {
-  border-radius: 999px;
-  font-weight: 600;
-}
-
-.summary-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.9rem;
-}
-
-.summary-pill {
-  padding: 1rem 1.1rem;
-  border-radius: 20px;
-}
-
-.summary-label {
-  display: block;
-  color: var(--muted);
-  font-size: 0.84rem;
-  margin-bottom: 0.35rem;
-}
-
-.summary-value {
-  display: block;
-  font-size: 1.45rem;
-  line-height: 1.1;
-}
-
-.summary-value-wide {
-  font-size: 1rem;
-}
-
-.tier-list {
-  display: grid;
-  gap: 1rem;
-}
-
-.tier-row {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 28px;
-}
-
-.tier-label {
-  display: flex;
-  gap: 0.9rem;
-  align-items: flex-start;
-  padding: 1rem;
-  border-radius: 22px;
-}
-
-.tier-label-top {
-  background: linear-gradient(180deg, rgba(240, 213, 139, 0.9), rgba(240, 213, 139, 0.58));
-}
-
-.tier-label-considering {
-  background: linear-gradient(180deg, rgba(216, 226, 207, 0.92), rgba(216, 226, 207, 0.56));
-}
-
-.tier-label-purchased {
-  background: linear-gradient(180deg, rgba(213, 211, 220, 0.92), rgba(213, 211, 220, 0.56));
-}
-
-.tier-kicker {
-  width: 2.3rem;
-  height: 2.3rem;
-  border-radius: 16px;
+.brand-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(23, 20, 17, 0.9);
-  color: #fffdfa;
+  width: 2.3rem;
+  height: 2.3rem;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 0.86rem;
+}
+
+.status-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.filter-button {
+  min-height: 2.4rem;
+  padding: 0.55rem 0.8rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.filter-button:hover,
+.filter-button:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--ink);
+}
+
+.filter-button.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+
+main {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.intro-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  gap: 2rem;
+  align-items: end;
+  padding: 4rem 0 2.2rem;
+}
+
+.intro-copy {
+  max-width: 760px;
+}
+
+.eyebrow {
+  margin: 0 0 0.55rem;
+  color: var(--red);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+h1 {
+  max-width: 10ch;
+  font-size: 4rem;
+}
+
+.intro-copy p:last-child {
+  max-width: 54rem;
+  margin: 1.2rem 0 0;
+  color: var(--muted);
+  font-size: 1.15rem;
+}
+
+.quick-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  padding-bottom: 0.2rem;
+}
+
+.quick-stats div {
+  min-height: 6.2rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.stat-value,
+.stat-label {
+  display: block;
+}
+
+.stat-value {
+  font-size: 2.1rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.stat-label {
+  margin-top: 0.55rem;
+  color: var(--muted);
   font-weight: 700;
 }
 
-.tier-label h2 {
-  margin: 0;
-  font-size: 1.45rem;
-}
-
-.tier-label p {
-  margin: 0.35rem 0 0;
-  color: rgba(23, 20, 17, 0.72);
-}
-
-.tier-cards {
-  min-height: 13rem;
+.collection-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
+  padding: 1rem 0 3rem;
 }
 
 .gun-card {
   display: flex;
+  min-height: 100%;
   flex-direction: column;
   overflow: hidden;
-  min-height: 100%;
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 24px;
-  box-shadow: 0 10px 28px rgba(40, 31, 22, 0.06);
-  cursor: grab;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  border-radius: 8px;
+  box-shadow: 0 8px 22px rgba(20, 30, 24, 0.08);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .gun-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 36px rgba(40, 31, 22, 0.1);
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
 }
 
-.gun-card:active {
-  cursor: grabbing;
+.gun-card.is-hidden {
+  display: none;
 }
 
-.gun-image,
-.image-placeholder {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: linear-gradient(135deg, #ece5d9, #f8f4ed);
+.featured-card {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.75fr);
+}
+
+.gun-image-wrap {
+  display: grid;
+  min-height: 240px;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(31, 122, 85, 0.16), transparent 42%),
+    linear-gradient(180deg, #edf4ef, #f7f9f8);
   border-bottom: 1px solid var(--line);
 }
 
-.image-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted);
-  font-size: 0.9rem;
+.featured-card .gun-image-wrap {
+  min-height: 100%;
+  border-right: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.gun-image-wrap img {
+  width: 100%;
+  height: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  padding: 1.25rem;
+}
+
+.featured-card .gun-image-wrap img {
+  max-height: 520px;
 }
 
 .gun-card-body {
-  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
   flex: 1;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1.25rem;
 }
 
-.maker-label {
-  color: var(--muted);
-  font-size: 0.82rem;
+.card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
 }
 
-.gun-card h3 {
-  font-size: 1.18rem;
-  margin: 0;
-}
-
-.gun-variant,
-.gun-notes {
-  color: var(--muted);
-  font-size: 0.93rem;
-}
-
-.gun-price {
+.status-pill {
   display: inline-flex;
   align-items: center;
-  width: fit-content;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  background: #171411;
-  color: #fffdfa;
-  font-size: 0.85rem;
-  font-weight: 600;
+  min-height: 1.9rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
 
-.gun-actions {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: auto;
-  padding-top: 0.3rem;
+.status-pill.owned {
+  background: var(--green);
 }
 
-.ghost-card {
-  border: 2px dashed rgba(23, 20, 17, 0.24);
-  background: rgba(255, 253, 250, 0.5);
-  box-shadow: none;
+.status-pill.maybe {
+  background: var(--teal);
 }
 
-.form-control,
-.form-select,
-.modal-content {
-  border-radius: 18px;
+.status-pill.planned {
+  background: var(--red);
 }
 
-.modal-content {
+.status-pill.complete {
+  background: var(--coal);
+}
+
+.maker {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.gun-card h2 {
+  font-size: 1.65rem;
+}
+
+.featured-card h2 {
+  font-size: 2.35rem;
+}
+
+.gun-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.spec-list {
+  display: grid;
+  gap: 0.55rem;
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.spec-list li {
+  min-height: 2.25rem;
+  padding: 0.45rem 0.65rem;
+  color: var(--ink);
+  background: #f3f6f2;
   border: 1px solid var(--line);
-  background: #fffaf4;
+  border-radius: 8px;
+  font-weight: 700;
 }
 
-@media (max-width: 991.98px) {
-  .page-header,
-  .tier-row {
+.decision-section {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(260px, 1.1fr);
+  gap: 2rem;
+  align-items: start;
+  padding: 2rem 0 4.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.decision-section h2 {
+  font-size: 2rem;
+}
+
+.decision-section p:last-child {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+@media (max-width: 980px) {
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .status-nav {
+    width: 100%;
+    justify-content: flex-start;
+    padding-bottom: 0.15rem;
+  }
+
+  .intro-section,
+  .decision-section {
     grid-template-columns: 1fr;
   }
 
-  .page-header {
-    align-items: start;
+  h1 {
+    max-width: 12ch;
+    font-size: 3.1rem;
   }
 
-  .summary-row {
+  .collection-section {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
 
-@media (max-width: 767.98px) {
-  .summary-row,
-  .tier-cards {
+  .featured-card {
+    grid-column: span 2;
     grid-template-columns: 1fr;
   }
 
-  .page-header,
-  .tier-row {
-    border-radius: 22px;
+  .featured-card .gun-image-wrap {
+    min-height: 300px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 640px) {
+  main {
+    width: min(100% - 1rem, 1180px);
+  }
+
+  .site-header {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  .brand {
+    font-size: 0.95rem;
+  }
+
+  .intro-section {
+    padding-top: 2.4rem;
+  }
+
+  h1 {
+    max-width: 11ch;
+    font-size: 2.45rem;
+  }
+
+  .intro-copy p:last-child {
+    font-size: 1rem;
+  }
+
+  .quick-stats,
+  .collection-section {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-stats div {
+    min-height: 5rem;
+  }
+
+  .featured-card {
+    grid-column: auto;
+  }
+
+  .gun-image-wrap,
+  .featured-card .gun-image-wrap {
+    min-height: 220px;
+  }
+
+  .gun-card h2,
+  .featured-card h2,
+  .decision-section h2 {
+    font-size: 1.55rem;
   }
 }

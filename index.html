@@ -3,167 +3,233 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Handgun Tier List</title>
+    <title>Gun Collection Roadmap</title>
     <meta
       name="description"
-      content="A simple tier list for handgun plans with pictures, names, prices, and drag-and-drop status lanes."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      crossorigin="anonymous"
+      content="A personal handgun collection roadmap for owned, maybe, planned, and collection-completing picks."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="page-shell">
-      <div class="container py-4 py-lg-5">
-        <header class="page-header mb-4">
+    <header class="site-header">
+      <a class="brand" href="#collection" aria-label="Gun collection roadmap">
+        <span class="brand-mark">GC</span>
+        <span>Collection Roadmap</span>
+      </a>
+      <nav class="status-nav" aria-label="Collection filters">
+        <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">
+          All
+        </button>
+        <button class="filter-button" type="button" data-filter="owned" aria-pressed="false">
+          Owned
+        </button>
+        <button class="filter-button" type="button" data-filter="maybe" aria-pressed="false">
+          Maybe
+        </button>
+        <button class="filter-button" type="button" data-filter="planned" aria-pressed="false">
+          Planned
+        </button>
+        <button class="filter-button" type="button" data-filter="complete" aria-pressed="false">
+          Complete
+        </button>
+      </nav>
+    </header>
+
+    <main id="collection">
+      <section class="intro-section" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <p class="eyebrow">Personal buy list</p>
+          <h1 id="page-title">Keep the collection focused.</h1>
+          <p>
+            One owned carry pistol, two maybe picks, two planned buys, and one final slot for a
+            modern 1911 or 2011.
+          </p>
+        </div>
+
+        <div class="quick-stats" aria-label="Collection summary">
           <div>
-            <span class="eyebrow">Tier List</span>
-            <h1 class="display-5 mb-2">My handgun plans</h1>
-            <p class="lead-copy mb-0">
-              Drag cards between tiers to show what I want most, what I am still considering,
-              and what I already own.
+            <span class="stat-value">1</span>
+            <span class="stat-label">owned</span>
+          </div>
+          <div>
+            <span class="stat-value">2</span>
+            <span class="stat-label">maybe</span>
+          </div>
+          <div>
+            <span class="stat-value">2</span>
+            <span class="stat-label">planned</span>
+          </div>
+          <div>
+            <span class="stat-value">1</span>
+            <span class="stat-label">final slot</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="collection-section" aria-label="Handgun cards">
+        <article class="gun-card featured-card" data-status="owned">
+          <div class="gun-image-wrap">
+            <img
+              src="https://www.sigsauer.com/media/catalog/product/cache/2f7933e2ff16f0ec074a16ab6b6195f2/p/3/p365-spectre-comp-web-3.jpg"
+              alt="SIG Sauer P365 Spectre Comp"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="gun-card-body">
+            <div class="card-heading">
+              <span class="status-pill owned">Owned</span>
+              <span class="maker">SIG Sauer</span>
+            </div>
+            <h2>P365 Spectre Comp</h2>
+            <p>
+              The anchor piece: compact, compensated, already in the collection.
             </p>
+            <ul class="spec-list" aria-label="SIG Sauer P365 Spectre Comp notes">
+              <li>Micro-compact feel</li>
+              <li>Optics-ready Spectre setup</li>
+              <li>Keep as the carry baseline</li>
+            </ul>
           </div>
-          <div class="header-actions">
-            <button class="btn btn-dark" id="add-handgun-button" type="button">Add handgun</button>
-            <button class="btn btn-outline-dark" id="reset-board-button" type="button">Reset list</button>
-          </div>
-        </header>
+        </article>
 
-        <section class="summary-row mb-4" id="summary-cards">
-          <div class="summary-pill">
-            <span class="summary-label">Total</span>
-            <strong class="summary-value" id="total-count">0</strong>
+        <article class="gun-card" data-status="maybe">
+          <div class="gun-image-wrap">
+            <img
+              src="https://www.sigsauer.com/media/wysiwyg/P365-ausa-2022.jpg"
+              alt="SIG Sauer P365"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
-          <div class="summary-pill">
-            <span class="summary-label">Top priority</span>
-            <strong class="summary-value summary-value-wide" id="top-choice">None yet</strong>
-          </div>
-          <div class="summary-pill">
-            <span class="summary-label">With prices</span>
-            <strong class="summary-value" id="priced-count">0</strong>
-          </div>
-          <div class="summary-pill">
-            <span class="summary-label">Purchased</span>
-            <strong class="summary-value" id="purchased-count">0</strong>
-          </div>
-        </section>
-
-        <section class="tier-list" id="priority-board">
-          <article class="tier-row" data-priority="top">
-            <div class="tier-label tier-label-top">
-              <span class="tier-kicker">A</span>
-              <div>
-                <h2>Top Priority</h2>
-                <p>Closest to the next buy.</p>
-              </div>
+          <div class="gun-card-body">
+            <div class="card-heading">
+              <span class="status-pill maybe">Maybe</span>
+              <span class="maker">SIG Sauer</span>
             </div>
-            <div class="tier-cards lane-body" id="lane-top"></div>
-          </article>
+            <h2>P365</h2>
+            <p>
+              The familiar choice if staying inside the P365 ecosystem matters most.
+            </p>
+            <ul class="spec-list" aria-label="SIG Sauer P365 notes">
+              <li>Small everyday option</li>
+              <li>Parts and feel stay familiar</li>
+              <li>Compare against the Glock G43</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="tier-row" data-priority="considering">
-            <div class="tier-label tier-label-considering">
-              <span class="tier-kicker">B</span>
-              <div>
-                <h2>Considering</h2>
-                <p>Still comparing and narrowing down.</p>
-              </div>
+        <article class="gun-card" data-status="maybe">
+          <div class="gun-image-wrap">
+            <img
+              src="https://eu-images.contentstack.com/v3/assets/bltf7171cc1cfc1a31f/blt53b4c4a40a715c0c/690a203713307b262b9889d5/G43-XS.jpg"
+              alt="Glock G43"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="gun-card-body">
+            <div class="card-heading">
+              <span class="status-pill maybe">Maybe</span>
+              <span class="maker">Glock</span>
             </div>
-            <div class="tier-cards lane-body" id="lane-considering"></div>
-          </article>
+            <h2>G43</h2>
+            <p>
+              The simple, slim alternate path for the smallest Glock slot.
+            </p>
+            <ul class="spec-list" aria-label="Glock G43 notes">
+              <li>Single-stack 9mm</li>
+              <li>Shortest Glock candidate</li>
+              <li>Worth handling before deciding</li>
+            </ul>
+          </div>
+        </article>
 
-          <article class="tier-row" data-priority="purchased">
-            <div class="tier-label tier-label-purchased">
-              <span class="tier-kicker">C</span>
-              <div>
-                <h2>Already Purchased</h2>
-                <p>Picked up and off the wishlist.</p>
-              </div>
+        <article class="gun-card" data-status="planned">
+          <div class="gun-image-wrap">
+            <img src="img/g48-mos.webp" alt="Glock G48 MOS" loading="lazy" decoding="async" />
+          </div>
+          <div class="gun-card-body">
+            <div class="card-heading">
+              <span class="status-pill planned">Planned</span>
+              <span class="maker">Glock</span>
             </div>
-            <div class="tier-cards lane-body" id="lane-purchased"></div>
-          </article>
-        </section>
-      </div>
+            <h2>G48</h2>
+            <p>
+              The planned slimline Glock with the longer sight radius and calmer footprint.
+            </p>
+            <ul class="spec-list" aria-label="Glock G48 notes">
+              <li>Slimline frame</li>
+              <li>Comfortable carry size</li>
+              <li>Next-list priority</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="gun-card" data-status="planned">
+          <div class="gun-image-wrap">
+            <img
+              src="https://springfieldarmory.b-cdn.net/wp-content/uploads/EC9409B-U-1024x770.png"
+              alt="Springfield Armory Echelon 4.0C"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="gun-card-body">
+            <div class="card-heading">
+              <span class="status-pill planned">Planned</span>
+              <span class="maker">Springfield Armory</span>
+            </div>
+            <h2>Echelon C</h2>
+            <p>
+              The compact Echelon slot: modern striker-fired ergonomics, optic mounting, and modularity.
+            </p>
+            <ul class="spec-list" aria-label="Springfield Echelon C notes">
+              <li>4-inch compact profile</li>
+              <li>Optics-ready slide</li>
+              <li>Compare standard vs comp</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="gun-card" data-status="complete">
+          <div class="gun-image-wrap">
+            <img
+              src="https://images.contentstack.io/v3/assets/blted16ad9939ec9fa0/blt164a8b793ac3fbb8/65d528b9f4171c34b8d392a2/C2_Base_Image_2024.png"
+              alt="Staccato C2 as a modern 2011 reference"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="gun-card-body">
+            <div class="card-heading">
+              <span class="status-pill complete">Complete</span>
+              <span class="maker">Modern 1911 / 2011</span>
+            </div>
+            <h2>Final collection slot</h2>
+            <p>
+              A refined hammer-fired piece to round out the collection once the practical picks are done.
+            </p>
+            <ul class="spec-list" aria-label="Modern 1911 or 2011 notes">
+              <li>Pick exact model later</li>
+              <li>1911 heritage or 2011 capacity</li>
+              <li>Keep this as the grail slot</li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="decision-section" aria-labelledby="decision-title">
+        <div>
+          <p class="eyebrow">Next decision</p>
+          <h2 id="decision-title">P365 or G43 first, then move to the planned pair.</h2>
+        </div>
+        <p>
+          The current shape is clean: keep the Spectre Comp as the reference point, choose one small
+          maybe pistol, then chase the Glock G48 and Echelon C before the final 1911 or 2011.
+        </p>
+      </section>
     </main>
 
-    <div class="modal fade" id="handgunModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form class="modal-content" id="handgun-form">
-          <div class="modal-header">
-            <div>
-              <p class="modal-eyebrow mb-1">Tier List Item</p>
-              <h2 class="modal-title fs-4 mb-0">Edit Handgun</h2>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="handgun-id" />
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label" for="model">Model</label>
-                <input class="form-control" id="model" name="model" required />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label" for="maker">Maker</label>
-                <input class="form-control" id="maker" name="maker" required />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label" for="price">Price</label>
-                <input class="form-control" id="price" name="price" placeholder="$899" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label" for="priority">Tier</label>
-                <select class="form-select" id="priority" name="priority">
-                  <option value="top">Top Priority</option>
-                  <option value="considering">Considering</option>
-                  <option value="purchased">Already Purchased</option>
-                </select>
-              </div>
-              <div class="col-12">
-                <label class="form-label" for="variant">Variant / Configuration</label>
-                <input class="form-control" id="variant" name="variant" placeholder='Example: MOS, 4" compact' />
-              </div>
-              <div class="col-12">
-                <label class="form-label" for="imageUrl">Image URL</label>
-                <input class="form-control" id="imageUrl" name="imageUrl" placeholder="https://... or img/file.jpg" />
-              </div>
-              <div class="col-12">
-                <label class="form-label" for="notes">Notes</label>
-                <textarea
-                  class="form-control"
-                  id="notes"
-                  name="notes"
-                  rows="4"
-                  placeholder="Quick reason why it is here..."
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-outline-danger" id="delete-button">Delete</button>
-            <div class="d-flex gap-2">
-              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-dark">Save item</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
